@@ -621,8 +621,8 @@ section {
 /* ── ABOUT / SPLIT ── */
 .split-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 3.5rem;
   align-items: center;
 }
 
@@ -631,6 +631,7 @@ section {
   border-radius: 16px;
   /* allow the animated border to be visible outside the inner card */
   overflow: visible;
+  justify-self: end;
 }
 
 .about-img-bg {
@@ -873,12 +874,12 @@ section {
 
 /* ── ABOUT SUMMARY ── */
 .about-summary {
-  max-width: 720px;
+  max-width: 860px;
 }
 
 .about-summary p {
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 1.25rem;
 }
@@ -1642,6 +1643,11 @@ footer {
   .nav-links {
     display: none;
   }
+
+  .about-img-wrap {
+    width: 100%;
+    justify-self: start;
+  }
 }
 
 @media (max-width: 500px) {
@@ -1666,6 +1672,9 @@ footer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
+  .about-badge{
+    right: 1rem;
+  }
   .contact-wrap {
     gap: 1.5rem;
   }
@@ -1684,6 +1693,10 @@ footer {
     align-items: center;
     gap: 0.85rem;
     justify-content: flex-start;
+  }
+
+  .about-img-wrap {
+    max-width: 100%;
   }
 }
 
