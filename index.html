@@ -407,21 +407,26 @@
     </div>
     <div class="contact-form">
       <p class="form-intro">Or send a message directly:</p>
-      <div class="input-group">
-        <label>Name</label>
-        <input type="text" placeholder="Your name" />
-      </div>
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" placeholder="your@email.com" />
-      </div>
-      <div class="input-group">
-        <label>Message</label>
-        <textarea rows="5" placeholder="Your message..."></textarea>
-      </div>
-      <button class="btn-primary" style="border:none;cursor:pointer;font-size:0.95rem;padding:0.85rem 1.8rem;width:100%;justify-content:center;" onclick="window.location.href='mailto:nomimehar667@gmail.com?subject=Portfolio contact'">
-        Send via Email →
-      </button>
+      <form id="contactForm">
+        <div class="input-group">
+          <label for="contactName">Name</label>
+          <input id="contactName" name="name" type="text" placeholder="Your name" required />
+        </div>
+        <div class="input-group">
+          <label for="contactEmail">Email</label>
+          <input id="contactEmail" name="email" type="email" placeholder="your@email.com" required />
+        </div>
+        <div class="input-group">
+          <label for="contactMessage">Message</label>
+          <textarea id="contactMessage" name="message" rows="5" placeholder="Your message..." required></textarea>
+        </div>
+
+        <div id="contactStatus" style="margin-top:0.75rem;font-size:0.92rem;min-height:1.2em;"></div>
+
+        <button id="contactSubmitBtn" type="submit" class="btn-primary" style="border:none;cursor:pointer;font-size:0.95rem;padding:0.85rem 1.8rem;width:100%;justify-content:center;">
+          Send via Email →
+        </button>
+      </form>
     </div>
   </div>
 </section>
@@ -466,6 +471,69 @@
     </div>
   </div>
 </footer>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  (function() {
+    var form = document.getElementById('contactForm');
+    if (!form) return;
+
+    // TODO: Replace this with your Email.js Public Key (found in Email.js dashboard).
+    emailjs.init('V6_Y2Xol7nf8kG8Q1');
+
+    var statusEl = document.getElementById('contactStatus');
+    var submitBtn = document.getElementById('contactSubmitBtn');
+
+    function setStatus(text) {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var nameVal = (document.getElementById('contactName').value || '').trim();
+      var emailVal = (document.getElementById('contactEmail').value || '').trim();
+      var messageVal = (document.getElementById('contactMessage').value || '').trim();
+
+      if (!nameVal || !emailVal || !messageVal) {
+        setStatus('Please fill in all fields.');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
+      setStatus('');
+
+      // These keys must match the variables you created in your Email.js template.
+      var templateParams = {
+        name: nameVal,
+        email: emailVal,
+        message: messageVal
+      };
+
+      emailjs
+        .send('service_uldczbt', 'template_0lhg1wg', templateParams)
+        .then(function() {
+          setStatus('Message sent! I will get back to you soon.');
+          form.reset();
+        })
+        .catch(function(error) {
+          console.error('EmailJS error:', error);
+          var msg = (error && (error.text || error.message)) ? (error.text || error.message) : '';
+          setStatus(msg ? ('Something went wrong: ' + msg) : 'Something went wrong. Please try again.');
+        })
+        .finally(function() {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send via Email →';
+          }
+        });
+    });
+  })();
+</script>
 
 <script>
 (function() {
